@@ -31,8 +31,8 @@ library(sqldf)
 #                   dbname = "pandore",
 #                   host = "10.69.192.179",
 #                   port = 3306,
-#                   user = "jamoneau",
-#                   password = "aurelien")
+#                   user = "",
+#                   password = "")
 # 
 # sort(dbListTables(conR))
 # 
