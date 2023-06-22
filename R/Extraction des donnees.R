@@ -39,7 +39,7 @@ library(sqldf)
 # sqlutils::execQuery(connection = conR, query = "Requete_1_seb_le_meilleur")
 
 # Recuperation des codes 4 lettres des taxons 
-code <- as.tibble(read.csv2("data/Donnees_utilisables/CODE_OMNIDIA_traites.csv", stringsAsFactors = FALSE)) %>% 
+code <- as.tibble(read.csv2("data/Donnees_utilisables/Fichiers/CODE_OMNIDIA_traites.csv", stringsAsFactors = FALSE)) %>% 
   dplyr::select(-X) %>% 
   mutate(code_taxon = code_omnidia) %>% 
   dplyr::select(-code_omnidia)
@@ -112,7 +112,7 @@ Transcoded_Flore <- Diatom2 %>%
   left_join(code %>% dplyr::select(-name), by = "SANDRE") %>%
   filter(SANDRE != 0) %>% 
   # Fusion de la nouvelle taxonomie et remplaecement
-  left_join(as.tibble(read.csv2("data/Donnees_utilisables/table_transcodage.csv", stringsAsFactors = FALSE)) %>% 
+  left_join(as.tibble(read.csv2("data/Donnees_utilisables/Fichiers/table_transcodage.csv", stringsAsFactors = FALSE)) %>% 
               dplyr::select(code_taxon = "abre", True_name = "CodeValid"), by = "code_taxon") %>% 
   mutate(code_taxon = if_else(is.na(True_name) == T, code_taxon, True_name)) %>% 
   dplyr::select(-True_name) %>% filter(!is.na(code_taxon)) %>% 
@@ -129,7 +129,7 @@ stations_pandore <- as.tibble(sqlQuery(channel, "SELECT cd_site, commune, x, y F
   filter(longitude > 0)
 
 stations_NAIADES <- as.tibble(
-  read.csv2("data/Donnees_utilisables/Station.csv", stringsAsFactors = FALSE,
+  read.csv2("data/Donnees_utilisables/Fichiers/stations.csv", stringsAsFactors = FALSE,
             quote = "", na.strings=c("","NA"))
   ) %>% select(CODE_STATION = CdStationMesureEauxSurface, commune = LbCommune,
                longitude = CoordXStationMesureEauxSurface, latitude = CoordYStationMesureEauxSurface) %>% 
@@ -141,7 +141,7 @@ stations_NAIADES <- as.tibble(
 full_stations <- bind_rows(stations_NAIADES, stations_pandore) %>% 
   distinct(CODE_STATION, .keep_all = TRUE)
 
-load("data/Donnees_utilisables/Diatomees.RData")
+# load("data/Donnees_utilisables/Diatomees.RData")
 
 # Recuperation des données chimiques de Pandore
 tic()
@@ -189,8 +189,8 @@ toc()
 source("R/Fonction_fusion_chimie_biologie.R")
 source("R/Fonction_pick_date.R")
 
-load("data/Donnees_utilisables/Diatomees.RData")
-load("data/Donnees_utilisables/Chimie_pandore.RData")
+# load("data/Donnees_utilisables/Diatomees.RData")
+# load("data/Donnees_utilisables/Chimie_pandore.RData")
 
 Pick_date(2007, Chimie = Chimie_pandore, Diatomees = Transcoded_Flore)
 Pick_date(2008, Chimie = Chimie_pandore, Diatomees = Transcoded_Flore)
@@ -208,21 +208,21 @@ Pick_date(2019, Chimie = Chimie_pandore, Diatomees = Transcoded_Flore)
 Pick_date(2020, Chimie = Chimie_pandore, Diatomees = Transcoded_Flore)
 Pick_date(2021, Chimie = Chimie_pandore, Diatomees = Transcoded_Flore)
 
-x <- as.tibble(list(file = c("data/Donnees_utilisables/2007_traitee.xlsx", "data/Donnees_utilisables/2007_traitee.xlsx",
-                             "data/Donnees_utilisables/2008_traitee.xlsx", "data/Donnees_utilisables/2008_traitee.xlsx",
-                             "data/Donnees_utilisables/2009_traitee.xlsx", "data/Donnees_utilisables/2009_traitee.xlsx",
-                             "data/Donnees_utilisables/2010_traitee.xlsx", "data/Donnees_utilisables/2010_traitee.xlsx",
-                             "data/Donnees_utilisables/2011_traitee.xlsx", "data/Donnees_utilisables/2011_traitee.xlsx",
-                             "data/Donnees_utilisables/2012_traitee.xlsx", "data/Donnees_utilisables/2012_traitee.xlsx",
-                             "data/Donnees_utilisables/2013_traitee.xlsx", "data/Donnees_utilisables/2013_traitee.xlsx",
-                             "data/Donnees_utilisables/2014_traitee.xlsx", "data/Donnees_utilisables/2014_traitee.xlsx",
-                             "data/Donnees_utilisables/2015_traitee.xlsx", "data/Donnees_utilisables/2015_traitee.xlsx",
-                             "data/Donnees_utilisables/2016_traitee.xlsx", "data/Donnees_utilisables/2016_traitee.xlsx",
-                             "data/Donnees_utilisables/2017_traitee.xlsx", "data/Donnees_utilisables/2017_traitee.xlsx",
-                             "data/Donnees_utilisables/2018_traitee.xlsx", "data/Donnees_utilisables/2018_traitee.xlsx",
-                             "data/Donnees_utilisables/2019_traitee.xlsx", "data/Donnees_utilisables/2019_traitee.xlsx",
-                             "data/Donnees_utilisables/2020_traitee.xlsx", "data/Donnees_utilisables/2020_traitee.xlsx",
-                             "data/Donnees_utilisables/2021_traitee.xlsx", "data/Donnees_utilisables/2021_traitee.xlsx"),
+x <- as.tibble(list(file = c("data/Donnees_utilisables/Format donnees traitees/2007_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2007_traitee.xlsx",
+                             "data/Donnees_utilisables/Format donnees traitees/2008_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2008_traitee.xlsx",
+                             "data/Donnees_utilisables/Format donnees traitees/2009_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2009_traitee.xlsx",
+                             "data/Donnees_utilisables/Format donnees traitees/2010_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2010_traitee.xlsx",
+                             "data/Donnees_utilisables/Format donnees traitees/2011_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2011_traitee.xlsx",
+                             "data/Donnees_utilisables/Format donnees traitees/2012_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2012_traitee.xlsx",
+                             "data/Donnees_utilisables/Format donnees traitees/2013_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2013_traitee.xlsx",
+                             "data/Donnees_utilisables/Format donnees traitees/2014_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2014_traitee.xlsx",
+                             "data/Donnees_utilisables/Format donnees traitees/2015_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2015_traitee.xlsx",
+                             "data/Donnees_utilisables/Format donnees traitees/2016_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2016_traitee.xlsx",
+                             "data/Donnees_utilisables/Format donnees traitees/2017_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2017_traitee.xlsx",
+                             "data/Donnees_utilisables/Format donnees traitees/2018_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2018_traitee.xlsx",
+                             "data/Donnees_utilisables/Format donnees traitees/2019_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2019_traitee.xlsx",
+                             "data/Donnees_utilisables/Format donnees traitees/2020_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2020_traitee.xlsx",
+                             "data/Donnees_utilisables/Format donnees traitees/2021_traitee.xlsx", "data/Donnees_utilisables/Format donnees traitees/2021_traitee.xlsx"),
                     sheet = c("chimie", "flore", "chimie", "flore",
                               "chimie", "flore", "chimie", "flore",
                               "chimie", "flore", "chimie", "flore",
@@ -251,64 +251,7 @@ Flore <- bind_rows(Files[flore_sheet]) %>%
   group_by(CODE_STATION, DATE) %>% distinct()
 
 
-save(Chimie, Flore, file = "data/Donnees_utilisables/Donnees_completes.RData")
-write.csv2(Flore, "data/Donnees_utilisables/Flore.csv")
-
-
-
-
-
-
-
-load("data/Donnees_utilisables/Donnees_test_serveur.RData")
-
-library(parallel)
-library(parallelDist)
-library(doSNOW)
-library(NbClust)
-library(tidyverse)
-library(progress)
-library(vegan)
-library(vegan)
-library(tictoc)
-
-
-set.seed(1)
-NMDS_test_sampled <- sample_frac(NMDS_test[1:100,1:100], 0.1) # sampling
-NMDS_test_sampled <- decostand(NMDS_test_sampled, method = "hellinger")
-dist_mat <- parDist(as.matrix(NMDS_test_sampled),method="bray")
-
-NbClust(NMDS_test_sampled,
-        min.nc=2,
-        max.nc=6,
-        distance = NULL,
-        diss = dist_mat,
-        method="ward.D2",
-        index="all")
-                     
-
-# Arret des clusters
-snow::stopCluster(cl)
-toc()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+save(Chimie, Flore, file = "data/Donnees_utilisables/Fichiers/Donnees_completes.RData")
+write.csv2(Flore, "data/Donnees_utilisables/Fichiers/Flore.csv")
 
 

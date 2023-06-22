@@ -65,7 +65,7 @@ library(overlapping)
 
 
 # # Chargement des données 
-load("data/Donnees_utilisables/Donnees_completes.RData")
+load("data/Donnees_utilisables/Fichiers/Donnees_completes.RData")
 
 # Construction des fichiers et des objets qui serviront soit dans les calculs, soit dans les graphiques --------------------------------------------------------------------
 
@@ -88,12 +88,12 @@ Chim <- Chimie %>% filter(!is.na(Mediane)) %>%
 Communes <- c("Mana", "Roura", "Regina", "Maripasoula", "Papaichton", "Kourou",
               "Saint-Laurent-du-Maroni", "Iracoubo", "Montsinery-Tonnegrande", "Apatou")
 
-code <- as_tibble(read.csv2("data/Donnees_utilisables/CODE_OMNIDIA_traites.csv", stringsAsFactors = FALSE)) %>% 
+code <- as_tibble(read.csv2("data/Donnees_utilisables/Fichiers/CODE_OMNIDIA_traites.csv", stringsAsFactors = FALSE)) %>% 
   select(-X) %>% 
   mutate(code_taxon = code_omnidia)
 
 # On recupere les classes trophiques des taxons qui nous serviront a posteriori
-Trophie <- read_excel(path = "data/Donnees_utilisables/Classes_trophie.xlsx", 
+Trophie <- read_excel(path = "data/Donnees_utilisables/Fichiers/Classes_trophie.xlsx", 
            sheet = "Numbers") %>% filter(parameter == "PO4") %>% 
   dplyr::rename("code_taxon" = "code") %>% 
   mutate(Class = as.character(Class)) %>% 
@@ -147,15 +147,15 @@ Dendo <- clus_ward %>% as.dendrogram()
 Dendo_CEUO <- clus_ward_CEUO %>% as.dendrogram()
 
 
-New_taxons <- as_tibble(read_excel("data/Donnees_utilisables/Fichier_DREAL_1.xlsx",
+New_taxons <- as_tibble(read_excel("data/Donnees_utilisables/Fichiers/Fichier_DREAL_1.xlsx",
                                    sheet = "Non_contributifs")) %>% 
   dplyr::select(abre, Profil_assoc) %>%
   dplyr::rename(AFNOR = Profil_assoc) %>% 
-  left_join(as_tibble(read.csv2("data/Donnees_utilisables/table_transcodage.csv", stringsAsFactors = FALSE)) %>% # On change l'ancien code 4 lettres
+  left_join(as_tibble(read.csv2("data/Donnees_utilisables/Fichiers/table_transcodage.csv", stringsAsFactors = FALSE)) %>% # On change l'ancien code 4 lettres
               dplyr::select(AFNOR = "abre", True_name = "CodeValid"), by = "AFNOR") %>% 
   dplyr::mutate(AFNOR = if_else(is.na(True_name == T), AFNOR, True_name)) %>% 
   dplyr::select(-True_name) %>% 
-  left_join(as_tibble(read.csv2("data/Donnees_utilisables/table_transcodage.csv", stringsAsFactors = FALSE)) %>% # On change l'ancien code 4 lettres
+  left_join(as_tibble(read.csv2("data/Donnees_utilisables/Fichiers/table_transcodage.csv", stringsAsFactors = FALSE)) %>% # On change l'ancien code 4 lettres
               dplyr::select(abre = "abre", True_name = "CodeValid"), by = "abre") %>% 
   mutate(abre = if_else(is.na(True_name == T), abre, True_name)) %>% 
   dplyr::select(-True_name)
@@ -174,37 +174,37 @@ site_taxon_CEUO <- NMDS_test_CEUO %>%
   mutate(taxon = sub("_.*", "", taxon)) %>% 
   filter(Ab_relative > 0)
 
-save(dist_bc, file = "data/Donnees_utilisables/Dist_mat_2015_2021.RData")
-save(dist_bc_CEUO, file = "data/Donnees_utilisables/Dist_mat_2015_2021_CEUO.RData")
-save(clus_ward, file = "data/Donnees_utilisables/Cluster_2015_2021.RData")
+save(dist_bc, file = "data/Donnees_utilisables/Fichiers/Dist_mat_2015_2021.RData")
+save(dist_bc_CEUO, file = "data/Donnees_utilisables/Fichiers/Dist_mat_2015_2021_CEUO.RData")
+save(clus_ward, file = "data/Donnees_utilisables/Fichiers/Cluster_2015_2021.RData")
 save(clus_ward, file = "IBD_2022_shiny/Data/Cluster_2015_2021.RData")
-save(clus_ward_CEUO, file = "data/Donnees_utilisables/Cluster_CEUO_2015_2021.RData")
+save(clus_ward_CEUO, file = "data/Donnees_utilisables/Fichiers/Cluster_CEUO_2015_2021.RData")
 save(clus_ward_CEUO, file = "IBD_2022_shiny/Data/Cluster_CEUO_2015_2021.RData")
-save(NMDS_test, file = "data/Donnees_utilisables/Donnees_test_serveur.RData")
-save(NMDS_test_CEUO, file = "data/Donnees_utilisables/Donnees_test_serveur_CEUO.RData")
+save(NMDS_test, file = "data/Donnees_utilisables/Fichiers/Donnees_test_serveur.RData")
+save(NMDS_test_CEUO, file = "data/Donnees_utilisables/Fichiers/Donnees_test_serveur_CEUO.RData")
 save(NMDS_test, file = "IBD_2022_shiny/Data/Donnees_test_serveur.RData")
 save(NMDS_test_CEUO, file = "IBD_2022_shiny/Data/Donnees_test_serveur_CEUO.RData")
-save(New_taxons, file = "data/Donnees_utilisables/New_taxons.RData")
+save(New_taxons, file = "data/Donnees_utilisables/Fichiers/New_taxons.RData")
 save(New_taxons, file = "IBD_2022_shiny/Data/New_taxons.RData")
-save(Dendo_CEUO, file = "data/Donnees_utilisables/Dendo_CEUO.RData")
-save(site_taxon_CEUO, file = "data/Donnees_utilisables/site_taxon_CEUO.RData")
-save(Dendo, file = "data/Donnees_utilisables/Dendo.RData")
-save(site_taxon, file = "data/Donnees_utilisables/site_taxon.RData")
+save(Dendo_CEUO, file = "data/Donnees_utilisables/Fichiers/Dendo_CEUO.RData")
+save(site_taxon_CEUO, file = "data/Donnees_utilisables/Fichiers/site_taxon_CEUO.RData")
+save(Dendo, file = "data/Donnees_utilisables/Fichiers/Dendo.RData")
+save(site_taxon, file = "data/Donnees_utilisables/Fichiers/site_taxon.RData")
 
-load("data/Donnees_utilisables/Cluster_2015_2021.RData")
-load("data/Donnees_utilisables/Donnees_test_serveur.RData")
-load("data/Donnees_utilisables/Donnees_test_serveur_CEUO.RData")
+load("data/Donnees_utilisables/Fichiers/Cluster_2015_2021.RData")
+load("data/Donnees_utilisables/Fichiers/Donnees_test_serveur.RData")
+load("data/Donnees_utilisables/Fichiers/Donnees_test_serveur_CEUO.RData")
 
 # Traitement -----------------------------------------------------
 
-load("data/Donnees_utilisables/Dendo_CEUO.RData")
-load("data/Donnees_utilisables/site_taxon_CEUO.RData")
-load("data/Donnees_utilisables/Dendo.RData")
-load("data/Donnees_utilisables/site_taxon.RData")
-load("data/Donnees_utilisables/site_taxon_CEUO.RData")
-load("data/Donnees_utilisables/Donnees_test_serveur_CEUO.RData")
-load("data/Donnees_utilisables/Donnees_test_serveur.RData")
-# load("data/Donnees_utilisables/Mat_dist_CAH.RData")
+load("data/Donnees_utilisables/Fichiers/Dendo_CEUO.RData")
+load("data/Donnees_utilisables/Fichiers/site_taxon_CEUO.RData")
+load("data/Donnees_utilisables/Fichiers/Dendo.RData")
+load("data/Donnees_utilisables/Fichiers/site_taxon.RData")
+load("data/Donnees_utilisables/Fichiers/site_taxon_CEUO.RData")
+load("data/Donnees_utilisables/Fichiers/Donnees_test_serveur_CEUO.RData")
+load("data/Donnees_utilisables/Fichiers/Donnees_test_serveur.RData")
+# load("data/Donnees_utilisables/Fichiers/Mat_dist_CAH.RData")
 
 
 
@@ -261,7 +261,7 @@ tab_density = do.call(rbind,
                           function(FULL_TAX)
                             extract_density(Dend = Dendo, tax = FULL_TAX, tab = site_taxon)))
 
-save(tab_density, file = "data/Donnees_utilisables/tab_density.RData")
+save(tab_density, file = "data/Donnees_utilisables/Fichiers/tab_density.RData")
 
 # tab_density %>% group_by(taxon) %>% 
 #   summarise(somme = sum(density))
@@ -290,7 +290,7 @@ library(tidyverse)
 library(progress)
 library(igraph)
 library(tictoc)
-load("data/Donnees_utilisables/tab_density.RData")
+load("data/Donnees_utilisables/Fichiers/tab_density.RData")
 
 #Setup backend to use many processors
 totalCores = detectCores()
@@ -426,10 +426,10 @@ stopCluster(cluster)
 # Density_tab <- bind_rows(Density_list) %>% dplyr::arrange(taxon, taxon2, desc(pval)) 
 
 
-# save(Density_tab, file = "data/Donnees_utilisables/Densité_comparées_bootsrap.RData")
-save(Density_tab, file = "data/Donnees_utilisables/Densité_comparées_bootsrap.RData")
+# save(Density_tab, file = "data/Donnees_utilisables/Fichiers/Densité_comparées_bootsrap.RData")
+save(Density_tab, file = "data/Donnees_utilisables/Fichiers/Densité_comparées_bootsrap.RData")
 
-# load("data/Donnees_utilisables/Densité_comparées_bootsrap.RData")
+# load("data/Donnees_utilisables/Fichiers/Densité_comparées_bootsrap.RData")
 
 # Density_tab
 # Recuperation ds pourcentage pour 500 simulations
@@ -449,8 +449,8 @@ Check_profile <- Density_tab %>% group_by(taxon, taxon2) %>% # Density_tab_CEUO
   dplyr::arrange(taxon, desc(number))
 # mutate(percent_over_500 = (number*100)/500)
 
-# save(Check_profile, file = "data/Donnees_utilisables/Fiche_identification.RData")
-save(Check_profile, file = "data/Donnees_utilisables/Chech_profile.RData")
+# save(Check_profile, file = "data/Donnees_utilisables/Fichiers/Fiche_identification.RData")
+save(Check_profile, file = "data/Donnees_utilisables/Fichiers/Chech_profile.RData")
 
 # Maintenant, il s'agit de récupérer le pourcentage de sites en commun dans la CAH entre
 # deux taxons car en effet, deux taxons peuvent provenir de la même distribution mais
@@ -495,8 +495,8 @@ for(i in 1:length(Check_profile$taxon)){
 # FINAL_PROFILES <- Check_profile %>% left_join(data_to_fill, by = c("taxon","taxon2"))
 FINAL_PROFILES <- Check_profile %>% left_join(data_to_fill, by = c("taxon","taxon2"))
 
-# save(FINAL_PROFILES, file = "data/Donnees_utilisables/FINAL_PROFILES.RData")
-save(FINAL_PROFILES, file = "data/Donnees_utilisables/FINAL_PROFILES.RData")
+# save(FINAL_PROFILES, file = "data/Donnees_utilisables/Fichiers/FINAL_PROFILES.RData")
+save(FINAL_PROFILES, file = "data/Donnees_utilisables/Fichiers/FINAL_PROFILES.RData")
 
 # On va construire un dernière variable qui va évaluer la distance entre les sites de la CAH pour deux taxons. 
 # Cela devrait nous permettre de mieux décider quel profil affilier et permettre de faciliter une affiliation
@@ -523,8 +523,8 @@ FINALE_PROFILES_DENSITY <- FINAL_PROFILES %>% mutate(overlapping = mapply(functi
                                                                           taxon, 
                                                                           taxon2))
 
-# save(FINALE_PROFILES_DENSITY, file = "data/Donnees_utilisables/FINALE_PROFILES_DENSITY.RData")
-save(FINALE_PROFILES_DENSITY, file = "data/Donnees_utilisables/FINALE_PROFILES_DENSITY.RData")
+# save(FINALE_PROFILES_DENSITY, file = "data/Donnees_utilisables/Fichiers/FINALE_PROFILES_DENSITY.RData")
+save(FINALE_PROFILES_DENSITY, file = "data/Donnees_utilisables/Fichiers/FINALE_PROFILES_DENSITY.RData")
 
 
 # ASSOCIER UN RANG A CHAQUE PARAMETRE
@@ -572,7 +572,7 @@ rank_table <- FINALE_PROFILES_DENSITY %>%
   ungroup() |> 
   select(taxon,taxon2,med_pval,number,nb_site_com,part_tax1, part_tax2, overlapping, dif_n_site, mean_rank, n_site1, n_site2)
 
-save(rank_table, file = "data/Donnees_utilisables/rank_table.RData")
+save(rank_table, file = "data/Donnees_utilisables/Fichiers/rank_table.RData")
 
 # On va remanier les rangs en ajoutant la pvalue du test de wilcoxon entre 
 # les concentrations de PO4 sur les sites pour chaque paire de taxon
@@ -598,13 +598,13 @@ Phosphore_pval <- rank_table %>%
 # de profil ecologique car ils permettent de se rendre compte tout de même pour certain 
 # qu'ils ressemblent très fortement à des taxons sans profil.
 
-Prof_eco <- tibble(read.csv("data/Donnees_utilisables/IBD_params.csv", header = TRUE, sep = ";")) %>%
+Prof_eco <- tibble(read.csv("data/Donnees_utilisables/Fichiers/IBD_params.csv", header = TRUE, sep = ";")) %>%
   mutate(across(CL1:Val.Ind., ~as.numeric(gsub(",", ".", .)))) %>% 
   select(-DENOMINATION, -Origine, -SANDRE)
 
 
 # 
-# Transcoding <- tibble(read.csv("data/Donnees_utilisables/table_transcodage.csv", header = TRUE, sep = ";")) %>%
+# Transcoding <- tibble(read.csv("data/Donnees_utilisables/Fichiers/table_transcodage.csv", header = TRUE, sep = ";")) %>%
 #               select(abre, CodeValid)
 
 # On récupère les profils ecologiques des taxons candidats dans l'ordre de leur classement 
@@ -671,7 +671,7 @@ p1 + p2 + p3
 
 # Il faut donc récupérer le fichier IBD params 
 
-save(paires_wilcox, file = "data/Donnees_utilisables/paires_Wilcox.RData")
+save(paires_wilcox, file = "data/Donnees_utilisables/Fichiers/paires_Wilcox.RData")
 
 
 
@@ -942,18 +942,18 @@ cut_CEUO <- plot_dendo(cluster = tot_cluster_CEUO,
                        site_taxon = site_taxon_CEUO,
                        prob = c(0.25, 0.75))
 
-save(all_cut, file = "data/Donnees_utilisables/All_cut.RData")
-save(cut_CEUO, file = "data/Donnees_utilisables/cut_CEUO.RData")
+save(all_cut, file = "data/Donnees_utilisables/Fichiers/All_cut.RData")
+save(cut_CEUO, file = "data/Donnees_utilisables/Fichiers/cut_CEUO.RData")
 
 
 # Essais pour le shiny, ks tests, khi²... -------------------------------------
 
-load("data/Donnees_utilisables/All_cut.RData")
-load("data/Donnees_utilisables/cut_CEUO.RData")
-load("data/Donnees_utilisables/Donnees_test_serveur.RData")
-load("data/Donnees_utilisables/Donnees_completes.RData")
-load("data/Donnees_utilisables/New_taxons.RData")
-load("data/Donnees_utilisables/Cluster_2015_2021.RData")
+load("data/Donnees_utilisables/Fichiers/All_cut.RData")
+load("data/Donnees_utilisables/Fichiers/cut_CEUO.RData")
+load("data/Donnees_utilisables/Fichiers/Donnees_test_serveur.RData")
+load("data/Donnees_utilisables/Fichiers/Donnees_completes.RData")
+load("data/Donnees_utilisables/Fichiers/New_taxons.RData")
+load("data/Donnees_utilisables/Fichiers/Cluster_2015_2021.RData")
 
 `%notin%` <- Negate(`%in%`)
 
@@ -1010,7 +1010,7 @@ paire21 <- c(table(SECA$cluster),table(SPUP$cluster))
 # Récupérer la trophie des sites des clusters de chaque paire
 
 # On recupere les classes trophiques des taxons qui nous serviront a posteriori
-Trophie <- read_excel(path = "data/Donnees_utilisables/Classes_trophie.xlsx", 
+Trophie <- read_excel(path = "data/Donnees_utilisables/Fichiers/Classes_trophie.xlsx", 
                       sheet = "Numbers") %>% filter(parameter == "PO4") %>% 
   dplyr::rename("code_taxon" = "code") %>% 
   mutate(Class = as.character(Class)) %>% 
@@ -1356,7 +1356,7 @@ write_xlsx(tab_recap, "data/essaie.xlsx")
 # pour le tableau recap --> AJOUTER UNE COLONNE COMPARAISON TROPHIE AVEC LES PLOTS
 
 png_saver <- function(tax1,tax2){
-  png(file = paste("data/Donnees_utilisables/",stringr::str_sub(names(tax1[1]),start = 9,end = 13),"_", 
+  png(file = paste("data/Donnees_utilisables/Fichiers/",stringr::str_sub(names(tax1[1]),start = 9,end = 13),"_", 
                    stringr::str_sub(names(tax2[1]),start = 9,end = 13),".jpeg"),
       width = 600, height = 600)
   plot(tax_sibling(tax1,tax2))
@@ -1425,7 +1425,7 @@ plot_CEUO2 = CEUO_site %>%
   theme_bw()+
   labs(x = "Trophie", y = "Nombre de taxon")
 
-png(file = paste("data/Donnees_utilisables/CEUO.jpeg"))
+png(file = paste("data/Donnees_utilisables/Fichiers/CEUO.jpeg"))
 plot(plot_CEUO+plot_CEUO2)
 dev.off()
 
@@ -1458,8 +1458,8 @@ library(doParallel)
 library(parallelDist)
 library(dendextend)
 
-load("data/Donnees_utilisables/site_taxon.RData")
-load("data/Donnees_utilisables/New_taxons.RData")
+load("data/Donnees_utilisables/Fichiers/site_taxon.RData")
+load("data/Donnees_utilisables/Fichiers/New_taxons.RData")
 `%notin%` <- Negate(`%in%`)
 
 
@@ -1593,7 +1593,7 @@ Giga_plot <- function(tax){
       # On enleve les endroits ou le taxon d'interet est seul indval
       ma_liste_finale <- Filter(function(df) nrow(df) > 1, ma_liste_jointe)
     }
-  # save(ma_liste_finale, file = paste0("data/Donnees_utilisables/indval",tax,".RData"))
+  # save(ma_liste_finale, file = paste0("data/Donnees_utilisables/Fichiers/indval",tax,".RData"))
   return(ma_liste_finale)
 }
 
@@ -1609,18 +1609,18 @@ Giga_plot("ADTC")
 toc()
 
 
-load("data/Donnees_utilisables/site_taxon_CEUO.RData")
+load("data/Donnees_utilisables/Fichiers/site_taxon_CEUO.RData")
 view(site_taxon_CEUO %>% distinct(site))
 
 
 
 # Traitement Sorties INDVAL du serveur de calcul  ----------------------------------------------------------------
-IBD_profiles <- tibble(read.csv(file = "data/Donnees_utilisables/IBD_params.csv", 
+IBD_profiles <- tibble(read.csv(file = "data/Donnees_utilisables/Fichiers/IBD_params.csv", 
                                 sep = ";", dec = ",")) %>%
   dplyr::select(-DENOMINATION, -SANDRE, -Origine) %>%
   rename(abre = AFNOR)
 
-transcodage <- read.csv(file = "data/Donnees_utilisables/table_transcodage.csv", 
+transcodage <- read.csv(file = "data/Donnees_utilisables/Fichiers/table_transcodage.csv", 
                         sep = ";", dec = ",") %>% dplyr::select(-name, -name_valid)
 
 
@@ -1635,18 +1635,18 @@ Transcoded_profiles <- IBD_profiles %>% left_join(transcodage, by = "abre") %>%
 Transcoded_profiles %>% arrange(esp) %>%
   anti_join(profiles %>% rename(esp = AFNOR), by = "esp")
 
-all.equal(data.frame(Transcoded_profiles %>% 
-            filter(esp %notin% c("CCTL", "CMLF", "GMUT", "HAMP", "SSMU")) %>%
-                     rename(AFNOR = esp) %>% arrange(AFNOR)),
-          profiles %>% select(-true_profile))
+# all.equal(data.frame(Transcoded_profiles %>% 
+#             filter(esp %notin% c("CCTL", "CMLF", "GMUT", "HAMP", "SSMU")) %>%
+#                      rename(AFNOR = esp) %>% arrange(AFNOR)),
+#           profiles %>% select(-true_profile))
 
-load("data/Donnees_utilisables/site_taxon.RData")
-load("data/Donnees_utilisables/New_taxons.RData")
+load("data/Donnees_utilisables/Fichiers/site_taxon.RData")
+load("data/Donnees_utilisables/Fichiers/New_taxons.RData")
 
-profiles <- read.csv(file = "data/Donnees_utilisables/IBD_params.csv", 
+profiles <- read.csv(file = "data/Donnees_utilisables/Fichiers/IBD_params.csv", 
                      sep = ";", dec = ",") %>%
   select(-SANDRE, -DENOMINATION, -Origine) %>% 
-  left_join(as_tibble(read.csv2("data/Donnees_utilisables/table_transcodage.csv", stringsAsFactors = FALSE)) %>%
+  left_join(as_tibble(read.csv2("data/Donnees_utilisables/Fichiers/table_transcodage.csv", stringsAsFactors = FALSE)) %>%
                                                            select(AFNOR = "abre", True_name = "CodeValid"), by = "AFNOR") %>%
   
   mutate(true_profile = if_else(AFNOR == True_name, 1,0)) %>% 
@@ -1659,7 +1659,7 @@ Candidats_Evaluation <- function(taxon){
   
   gc() 
   
-  load(paste0("data/Donnees_utilisables/indval",taxon,".RData"))
+  load(paste0("data/Donnees_utilisables/Results INDVAL/indval",taxon,".RData"))
   
   prof_prop <- ifelse(is.na(New_taxons %>% filter(abre == taxon) %>% pull(abre)) == TRUE, NA, New_taxons %>% filter(abre == taxon) %>% pull(AFNOR))
   
@@ -1685,7 +1685,7 @@ Candidats_Evaluation <- function(taxon){
       left_join(profiles %>% rename(esp = AFNOR) %>% distinct(), by = "esp") %>%
       drop_na()
     
-    # save(candidats, file = paste0("data/Donnees_utilisables/Candidats_",taxon,".RData"))
+    # save(candidats, file = paste0("data/Donnees_utilisables/Fichiers/Candidats_",taxon,".RData"))
     
   }else{
     candidats <- do.call("rbind", ma_liste_finale) %>% 
@@ -1716,7 +1716,7 @@ Candidats_Evaluation <- function(taxon){
 
 data.frame(Candidats_Evaluation("LHLU")) %>% arrange(esp)
 
-load(paste0("data/Donnees_utilisables/indval","SSBG",".RData"))
+load(paste0("data/Donnees_utilisables/Results INDVAL/indval","SSBG",".RData"))
 ma_liste_finale
 
 profiles %>% filter(AFNOR %in% unique(New_taxons %>% filter(abre == "LHLU") %>% pull(AFNOR)))
