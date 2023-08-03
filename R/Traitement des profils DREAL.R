@@ -1615,6 +1615,7 @@ view(site_taxon_CEUO %>% distinct(site))
 
 
 # Traitement Sorties INDVAL du serveur de calcul  ----------------------------------------------------------------
+
 IBD_profiles <- tibble(read.csv(file = "data/Donnees_utilisables/Fichiers/IBD_params.csv", 
                                 sep = ";", dec = ",")) %>%
   dplyr::select(-DENOMINATION, -SANDRE, -Origine) %>%
@@ -1714,18 +1715,24 @@ Candidats_Evaluation <- function(taxon){
   
 }
 
-data.frame(Candidats_Evaluation("LHLU")) %>% arrange(esp)
+data.frame(Candidats_Evaluation("ADMO")) %>% arrange(esp) %>% view()
+site_taxon %>% filter(taxon == "SEAT") %>% left_join(site_taxon %>% filter(taxon == "SJAP"), by = "site") %>%
+  drop_na()
 
-load(paste0("data/Donnees_utilisables/Results INDVAL/indval","SSBG",".RData"))
+load(paste0("data/Donnees_utilisables/Results INDVAL/indval","ADAM",".RData"))
 ma_liste_finale
 
-profiles %>% filter(AFNOR %in% unique(New_taxons %>% filter(abre == "LHLU") %>% pull(AFNOR)))
+profiles %>% filter(AFNOR %in% unique(New_taxons %>% filter(abre == "CEXF") %>% pull(AFNOR)))
 
-profiles %>% filter(AFNOR == "GADC")
-IBD_profiles %>% filter(abre == "AHOF")
-Prof_eco %>% filter(AFNOR == "FGRA")
+profiles %>% filter(AFNOR == "CEXF") 
 
-site_taxon %>% filter(taxon == "CPLA")
+
+
+IBD_profiles %>% filter(abre == "CEXF")
+
+Prof_eco %>% filter(AFNOR == "SNIG")
+
+site_taxon %>% filter(taxon == "EOMI")
 
 taxons <- site_taxon %>% filter(taxon %in% unique(New_taxons %>% pull(abre))) %>%
   group_by(taxon) %>% summarise(count = n()) %>% arrange(count) %>% filter(count >= 30) %>%

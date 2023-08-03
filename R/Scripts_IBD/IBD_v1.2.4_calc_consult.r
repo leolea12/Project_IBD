@@ -51,8 +51,8 @@ loadDependencies(dependencies)
 ## IMPORT DES FICHIERS DE CONFIGURATION ----
 
 # FICHIER D'ENTREE A MODIFIER !! 
-IBD_params <- read.csv2("data/Donnees_utilisables/IBD_params2.csv", stringsAsFactors = FALSE) %>% 
-  select_at(.vars = c("AFNOR", "SANDRE", paste0("CL", seq(7)), "Val.Ind."))
+IBD_params <- read.csv2("data/Donnees_utilisables/Fichiers/IBD_params.csv", stringsAsFactors = FALSE) %>% 
+  select_at(.vars = c("AFNOR", paste0("CL", seq(7)), "Val.Ind."))
 
 ## DECLARATION DES FONCTIONS ----
 
@@ -317,7 +317,7 @@ funResult 		<- function(indic, vIndic, heure_debut,
 options(warn = -1, scipen = 999)
 
 # Recuperation du fichier d'entree
-File           <- "data/Donnees_utilisables/IBD_file.txt"
+File           <- "R/Scripts_IBD/Test_IBD.txt"
 complementaire <- FALSE
 
 # Initialisation de l'heure

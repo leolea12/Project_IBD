@@ -45,9 +45,10 @@ code <- as.tibble(read.csv2("data/Donnees_utilisables/Fichiers/CODE_OMNIDIA_trai
   dplyr::select(-code_omnidia)
 
 # Base de donnees NAIADES ------------------------------------------------
-# Importation de la base de donnees biologiques de NAIADE
+# Importation de la base de donnees biologiques de NAIADES (Penser à télécharger 
+# la dernière version en ammont)
 
-Diatom <- as.tibble(fread("data/Donnees_de_base/fauneflore.csv")) %>%
+Diatom <- as.tibble(data.table::fread("data/Donnees_de_base/fauneflore.csv")) %>%
   dplyr::select("CODE_STATION" = CdStationMesureEauxSurface,
                 "Nom_groupe_taxo" = LbSupport,
                 "DATE" = DateDebutOperationPrelBio,
@@ -56,22 +57,12 @@ Diatom <- as.tibble(fread("data/Donnees_de_base/fauneflore.csv")) %>%
                 "RESULTAT" = RsTaxRep,
                 "Code_groupe_taxo" = CdSupport) %>% 
   filter(Code_groupe_taxo == 10) %>% 
-  bind_rows(as.tibble(fread("data/Donnees_de_base/Donnees_sup/Donnees_supp.csv")) %>% 
-              dplyr::select("CODE_STATION" = CdStationMesureEauxSurface,
-                            "Nom_groupe_taxo" = LbSupport,
-                            "DATE" = DateDebutOperationPrelBio,
-                            "SANDRE" = CdAppelTaxon,
-                            "Nom_latin_taxon" = NomLatinAppelTaxon,
-                            "RESULTAT" = RsTaxRep,
-                            "Code_groupe_taxo" = CdSupport) %>% 
-              filter(Code_groupe_taxo == 10)) %>%
   dplyr::select(-Code_groupe_taxo) %>% 
   distinct(CODE_STATION, Nom_groupe_taxo, DATE, SANDRE, Nom_latin_taxon, RESULTAT) %>%
   arrange(DATE,
           CODE_STATION,
           Nom_latin_taxon, RESULTAT) %>% 
   filter(RESULTAT != 0)
-
 
 # Recupération données pandore --------------------------------------------
 

@@ -464,7 +464,7 @@ funResult <- function(indic, vIndic, heure_debut, valid, sortie, file) {
 options(warn = -1)
 
 # Recuperation du fichier d'entree
-File <- "data/Donnees_utilisables/Test_IBD.txt"
+File <- "R/Scripts_IBD/Test_IBD.txt"
 
 # Initialisation de l'heure
 heure_debut <- Sys.time()
@@ -525,3 +525,4 @@ funResult(indic       = indic,
           valid       = valid,
           sortie      = sortie,
           file        = outputFile)
+
