@@ -1715,8 +1715,8 @@ Candidats_Evaluation <- function(taxon){
   
 }
 
-data.frame(Candidats_Evaluation("ADMO")) %>% arrange(esp) %>% view()
-site_taxon %>% filter(taxon == "SEAT") %>% left_join(site_taxon %>% filter(taxon == "SJAP"), by = "site") %>%
+data.frame(Candidats_Evaluation("GPUM")) %>% arrange(esp) %>% view()
+site_taxon %>% filter(taxon == "NSBN") %>% left_join(site_taxon %>% filter(taxon == "SJAP"), by = "site") %>%
   drop_na()
 
 load(paste0("data/Donnees_utilisables/Results INDVAL/indval","ADAM",".RData"))
@@ -1724,7 +1724,7 @@ ma_liste_finale
 
 profiles %>% filter(AFNOR %in% unique(New_taxons %>% filter(abre == "CEXF") %>% pull(AFNOR)))
 
-profiles %>% filter(AFNOR == "CEXF") 
+profiles %>% filter(AFNOR == "NINC") 
 
 
 
@@ -1743,3 +1743,31 @@ c(taxons[46:53],taxons[56:57])
 profiles %>% filter(AFNOR == "SEAT")
 
 New_taxons
+
+
+
+
+
+
+tab_eff_ech %>% 
+  ggplot(aes(x = 1, y = eff_ech)) + 
+  geom_boxplot(fill = "#66C1BF") + 
+  geom_point(color="black", size=2) +  
+  theme_inrae() + 
+  labs(y = "Effort échantillonnage")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
